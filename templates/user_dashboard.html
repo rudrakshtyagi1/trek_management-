@@ -1,70 +1,74 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row mb-4">
-    <div class="col-md-12">
-        <h2 class="border-bottom pb-2">My Dashboard</h2>
-        <p class="lead">Welcome, {{ current_user.username }}! Here you can explore treks and manage your bookings.</p>
+<div class="row mb-4 align-items-center">
+    <div class="col-md-6">
+        <h3>Available Treks</h3>
+    </div>
+    <div class="col-md-6">
+        <form method="GET" action="{{ url_for('user_dashboard') }}" class="d-flex">
+            <input type="text" class="form-control me-2" name="search" placeholder="Search by trek name...">
+            <button class="btn btn-outline-primary" type="submit">Search</button>
+            <a href="{{ url_for('user_dashboard') }}" class="btn btn-outline-secondary ms-2">Clear</a>
+        </form>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-12">
-        <h4>My Bookings</h4>
-        <div class="table-responsive mb-4">
-            <table class="table">
-                <thead class="table-light">
-                    <tr>
-                        <th>Trek ID</th>
-                        <th>Booking Date</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for booking in bookings %}
-                    <tr>
-                        <td>{{ booking.trek_id }}</td>
-                        <td>{{ booking.booking_date.strftime('%Y-%m-%d') }}</td>
-                        <td><span class="badge {% if booking.status == 'Pending' %}bg-warning{% elif booking.status == 'Confirmed' %}bg-success{% else %}bg-secondary{% endif %}">{{ booking.status }}</span></td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="3" class="text-center">You have no active bookings. Time to plan an adventure!</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+<div class="row mb-5">
+    {% for trek in open_treks %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title text-success">{{ trek.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ trek.location }}</h6>
+                <p class="card-text mb-1"><strong>Difficulty:</strong> {{ trek.difficulty }}</p>
+                <p class="card-text mb-1"><strong>Dates:</strong> {{ trek.start_date }} to {{ trek.end_date }}</p>
+                <p class="card-text mb-3"><strong>Slots Left:</strong> {{ trek.available_slots }}</p>
+                
+                <a href="{{ url_for('book_trek', trek_id=trek.id) }}" class="btn btn-primary w-100" onclick="return confirm('Confirm booking for {{ trek.name }}?');">Book Now</a>
+            </div>
         </div>
     </div>
+    {% else %}
+    <div class="col-12">
+        <p>No available treks found.</p>
+    </div>
+    {% endfor %}
 </div>
 
-<div class="row">
-    <div class="col-md-12">
-        <h4>Available Treks</h4>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            {% for trek in treks %}
-            <div class="col">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ trek.name }}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{{ trek.location }}</h6>
-                        <ul class="list-unstyled">
-                            <li><i class="bi bi-clock"></i> {{ trek.duration_days }} Days</li>
-                            <li><i class="bi bi-bar-chart"></i> Difficulty: {{ trek.difficulty }}</li>
-                            <li><i class="bi bi-tag"></i> Price: ${{ trek.price }}</li>
-                        </ul>
-                    </div>
-                    <div class="card-footer bg-transparent border-top-0">
-                        <button class="btn btn-primary w-100">Book Now</button>
-                    </div>
-                </div>
-            </div>
-            {% else %}
-            <div class="col-12">
-                <p>No treks currently available.</p>
-            </div>
-            {% endfor %}
-        </div>
+<h3>My Bookings & History</h3>
+<div class="card">
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Trek Name</th>
+                    <th>Booking Date</th>
+                    <th>Trek Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in user_bookings %}
+                <tr>
+                    <td>#{{ booking.id }}</td>
+                    <td>{{ booking.trek.name }}</td>
+                    <td>{{ booking.booking_date.strftime('%Y-%m-%d') }}</td>
+                    <td>
+                        {% if booking.trek.status == 'Completed' %}
+                            <span class="badge bg-success">Completed</span>
+                        {% else %}
+                            <span class="badge bg-primary">{{ booking.trek.status }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4">You haven't booked any treks yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 {% endblock %}
