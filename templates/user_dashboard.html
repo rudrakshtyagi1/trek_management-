@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h2 class="border-bottom pb-2">My Dashboard</h2>
+        <p class="lead">Welcome, {{ current_user.username }}! Here you can explore treks and manage your bookings.</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h4>My Bookings</h4>
+        <div class="table-responsive mb-4">
+            <table class="table">
+                <thead class="table-light">
+                    <tr>
+                        <th>Trek ID</th>
+                        <th>Booking Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.trek_id }}</td>
+                        <td>{{ booking.booking_date.strftime('%Y-%m-%d') }}</td>
+                        <td><span class="badge {% if booking.status == 'Pending' %}bg-warning{% elif booking.status == 'Confirmed' %}bg-success{% else %}bg-secondary{% endif %}">{{ booking.status }}</span></td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3" class="text-center">You have no active bookings. Time to plan an adventure!</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h4>Available Treks</h4>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for trek in treks %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ trek.name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ trek.location }}</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-clock"></i> {{ trek.duration_days }} Days</li>
+                            <li><i class="bi bi-bar-chart"></i> Difficulty: {{ trek.difficulty }}</li>
+                            <li><i class="bi bi-tag"></i> Price: ${{ trek.price }}</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0">
+                        <button class="btn btn-primary w-100">Book Now</button>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12">
+                <p>No treks currently available.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h2 class="border-bottom pb-2">Admin Dashboard</h2>
+        <p class="lead">Welcome back, Admin! Here you can oversee all platform activity.</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-primary mb-3 h-100">
+            <div class="card-header">Users</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ users|length }} Total Users</h5>
+                <p class="card-text">Registered users across all roles.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-success mb-3 h-100">
+            <div class="card-header">Treks</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ treks|length }} Active Treks</h5>
+                <p class="card-text">Available trekking packages.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-info mb-3 h-100">
+            <div class="card-header">Bookings</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ bookings|length }} Bookings</h5>
+                <p class="card-text">Total bookings processed.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h4>Recent Bookings</h4>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>User ID</th>
+                        <th>Trek ID</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.id }}</td>
+                        <td>{{ booking.user_id }}</td>
+                        <td>{{ booking.trek_id }}</td>
+                        <td><span class="badge bg-secondary">{{ booking.status }}</span></td>
+                        <td>{{ booking.booking_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">No bookings found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h2 class="border-bottom pb-2">Staff Dashboard</h2>
+        <p class="lead">Welcome, Staff member! Manage treks and view customer bookings here.</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4>Available Treks</h4>
+            <button class="btn btn-outline-success btn-sm">Add New Trek</button>
+        </div>
+        <div class="row">
+            {% for trek in treks %}
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ trek.name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ trek.location }}</h6>
+                        <p class="card-text">
+                            <strong>Duration:</strong> {{ trek.duration_days }} days<br>
+                            <strong>Difficulty:</strong> {{ trek.difficulty }}<br>
+                            <strong>Price:</strong> ${{ trek.price }}
+                        </p>
+                        <button class="btn btn-sm btn-primary">Edit</button>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12">
+                <p>No treks configured yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h4>Customer Bookings</h4>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>User ID</th>
+                        <th>Trek ID</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.id }}</td>
+                        <td>{{ booking.user_id }}</td>
+                        <td>{{ booking.trek_id }}</td>
+                        <td>{{ booking.status }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-success">Confirm</button>
+                            <button class="btn btn-sm btn-danger">Cancel</button>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">No bookings to manage.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
