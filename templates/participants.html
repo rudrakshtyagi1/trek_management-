@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- ===== PARTICIPANTS PAGE ===== -->
+
+<!-- Back button + Trek title -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <a href="{{ url_for('staff_dashboard') }}" class="btn btn-sm btn-outline-secondary mb-2">
+            <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+        </a>
+        <h1 class="page-title mb-0">Participants — {{ trek.name }}</h1>
+        <p class="text-muted small mb-0">
+            <i class="bi bi-geo-alt me-1"></i>{{ trek.location }} &nbsp;|&nbsp;
+            {{ trek.start_date.strftime('%d %b') }} &rarr; {{ trek.end_date.strftime('%d %b %Y') }}
+        </p>
+    </div>
+    <div class="text-end">
+        {% if trek.status == 'Open' %}
+            <span class="badge bg-success fs-6">Open</span>
+        {% elif trek.status == 'Started' %}
+            <span class="badge bg-primary fs-6">Started</span>
+        {% elif trek.status == 'Completed' %}
+            <span class="badge fs-6" style="background-color:#8B5CF6;">Completed</span>
+        {% elif trek.status == 'Cancelled' %}
+            <span class="badge bg-danger fs-6">Cancelled</span>
+        {% else %}
+            <span class="badge bg-secondary fs-6">{{ trek.status }}</span>
+        {% endif %}
+        <div class="small text-muted mt-1">{{ bookings | length }} participant(s)</div>
+    </div>
+</div>
+
+
+<!-- Search Bar -->
+<form method="GET" action="{{ url_for('view_participants', trek_id=trek.id) }}" class="mb-4">
+    <div class="row g-2 align-items-center">
+        <div class="col-md-5">
+            <div class="input-group">
+                <input type="text" class="form-control" name="search"
+                       placeholder="Search by name or username..." value="{{ search }}">
+                <button class="btn btn-outline-primary" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </div>
+        {% if search %}
+        <div class="col-auto">
+            <a href="{{ url_for('view_participants', trek_id=trek.id) }}"
+               class="btn btn-outline-secondary">
+                Clear
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</form>
+
+
+<!-- Participants Table -->
+<div class="table-wrapper">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Booking ID</th>
+                <th>Participant Name</th>
+                <th>Username</th>
+                <th>Phone</th>
+                <th>Booking Date</th>
+                <th>Booking Status</th>
+                <th>Attendance</th>
+                <th>Mark Attendance</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td class="fw-medium text-muted">{{ "BK-%04d" | format(booking.id) }}</td>
+                <td class="fw-medium">{{ booking.trekker.name }}</td>
+                <td class="text-muted">{{ booking.trekker.username }}</td>
+                <td>{{ booking.trekker.contact or '—' }}</td>
+                <td>{{ booking.booking_date.strftime('%d %b %Y') }}</td>
+                <td>
+                    {% if booking.status == 'Cancelled' %}
+                        <span class="badge bg-danger">Cancelled</span>
+                    {% else %}
+                        <span class="badge bg-success">Booked</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if booking.attendance == 'Present' %}
+                        <span class="badge bg-success">Present</span>
+                    {% elif booking.attendance == 'Absent' %}
+                        <span class="badge bg-danger">Absent</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Not Marked</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <!-- Attendance action buttons -->
+                    {% if booking.status != 'Cancelled' %}
+                    <div class="d-flex gap-1">
+                        <a href="{{ url_for('mark_attendance', booking_id=booking.id, att_status='Present') }}"
+                           class="btn btn-sm btn-success"
+                           title="Mark Present">
+                            <i class="bi bi-check-lg"></i>
+                        </a>
+                        <a href="{{ url_for('mark_attendance', booking_id=booking.id, att_status='Absent') }}"
+                           class="btn btn-sm btn-danger"
+                           title="Mark Absent">
+                            <i class="bi bi-x-lg"></i>
+                        </a>
+                        {% if booking.attendance != 'Not Marked' %}
+                        <a href="{{ url_for('mark_attendance', booking_id=booking.id, att_status='Not Marked') }}"
+                           class="btn btn-sm btn-outline-secondary"
+                           title="Reset Attendance">
+                            <i class="bi bi-arrow-counterclockwise"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <span class="text-muted small">—</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="8" class="text-center text-muted py-4">
+                    {% if search %}
+                        No participants found matching "{{ search }}".
+                    {% else %}
+                        No participants have booked this trek yet.
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<!-- ===== END PARTICIPANTS TABLE ===== -->
+
+{% endblock %}

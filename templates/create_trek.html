@@ -1,24 +1,39 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<!-- ===== CREATE TREK FORM ===== -->
 <div class="row justify-content-center">
     <div class="col-md-8">
+
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-sm btn-outline-secondary mb-3">
+            <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+        </a>
+
         <div class="card">
-            <div class="card-header bg-dark text-white">
-                <h4 class="mb-0">Create New Trek Route</h4>
+            <div class="card-header">
+                <i class="bi bi-plus-circle me-2 text-success"></i>
+                Create New Trek
             </div>
-            <div class="card-body">
+
+            <div class="card-body p-4">
                 <form method="POST" action="{{ url_for('create_trek') }}">
+
+                    <!-- Name & Location -->
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label class="form-label">Trek Name</label>
-                            <input type="text" class="form-control" name="name" required>
+                            <input type="text" class="form-control" name="name"
+                                   placeholder="e.g. Himalayan Base Camp" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Location</label>
-                            <input type="text" class="form-control" name="location" required>
+                            <input type="text" class="form-control" name="location"
+                                   placeholder="e.g. Uttarakhand, India" required>
                         </div>
                     </div>
+
+                    <!-- Difficulty, Duration, Slots -->
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <label class="form-label">Difficulty</label>
@@ -30,14 +45,18 @@
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Duration (Days)</label>
-                            <input type="number" class="form-control" name="duration" required>
+                            <input type="number" class="form-control" name="duration"
+                                   placeholder="e.g. 5" required min="1">
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Available Slots</label>
-                            <input type="number" class="form-control" name="available_slots" required>
+                            <input type="number" class="form-control" name="available_slots"
+                                   placeholder="e.g. 20" required min="1">
                         </div>
                     </div>
-                    <div class="row mb-3">
+
+                    <!-- Dates -->
+                    <div class="row mb-4">
                         <div class="col-md-6">
                             <label class="form-label">Start Date</label>
                             <input type="date" class="form-control" name="start_date" required>
@@ -47,11 +66,23 @@
                             <input type="date" class="form-control" name="end_date" required>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success">Create Trek</button>
-                    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
+
+                    <!-- Buttons -->
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-lg me-1"></i> Create Trek
+                        </button>
+                        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+                    </div>
+
                 </form>
             </div>
         </div>
+
     </div>
 </div>
+<!-- ===== END CREATE TREK ===== -->
+
 {% endblock %}

@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- ===================================================
+     PROFILE PAGE
+     Layout:
+       1. Profile Header Card  (avatar, name, badges, action buttons)
+       2. Personal Information Card  (read-only details)
+       3. Booking History Table  (permanent, sorted newest first)
+       4. Bootstrap Modal  (hidden until "Edit Profile" is clicked)
+     =================================================== -->
+
+
+<!-- ===== 1. PROFILE HEADER ===== -->
+<div class="card mb-4">
+    <div class="card-body py-4">
+        <div class="row align-items-center">
+
+            <!-- Avatar -->
+            <div class="col-auto">
+                <div style="width:72px;height:72px;border-radius:50%;
+                            background-color:#38BDF8;color:#fff;
+                            display:flex;align-items:center;justify-content:center;
+                            font-size:2rem;font-weight:700;">
+                    {{ current_user.name[0]|upper }}
+                </div>
+            </div>
+
+            <!-- Name + Role / Status badges -->
+            <div class="col">
+                <h4 class="fw-bold mb-1">{{ current_user.name }}</h4>
+                <div class="d-flex gap-2 flex-wrap">
+                    <span class="badge bg-primary">{{ current_user.role | capitalize }}</span>
+                    {% if current_user.status == 'blacklisted' %}
+                        <span class="badge bg-danger">Blacklisted</span>
+                    {% elif current_user.status == 'pending' %}
+                        <span class="badge bg-warning text-dark">Pending Approval</span>
+                    {% else %}
+                        <span class="badge bg-success">Active</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="col-auto d-flex gap-2 flex-wrap">
+                <!-- Role-specific back button -->
+                {% if current_user.role == 'admin' %}
+                    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-grid me-1"></i>Dashboard
+                    </a>
+                {% elif current_user.role == 'staff' %}
+                    <a href="{{ url_for('staff_dashboard') }}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-map me-1"></i>My Treks
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('user_dashboard') }}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-binoculars me-1"></i>Browse Treks
+                    </a>
+                {% endif %}
+
+                <!-- Edit Profile — opens Bootstrap Modal -->
+                <button type="button" class="btn btn-primary btn-sm"
+                        data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                    <i class="bi bi-pencil-square me-1"></i>Edit Profile
+                </button>
+
+                <!-- Logout -->
+                <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm">
+                    <i class="bi bi-box-arrow-right me-1"></i>Logout
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- ===== END PROFILE HEADER ===== -->
+
+
+<!-- ===== 2. PERSONAL INFORMATION CARD ===== -->
+<!-- Centered at ~90% page width using col-lg-10 -->
+<div class="row justify-content-center mb-4">
+    <div class="col-lg-10">
+        <div class="card">
+            <!-- Card Header -->
+            <div class="card-header">
+                <i class="bi bi-person-lines-fill me-2 text-primary"></i>Personal Information
+            </div>
+
+            <!-- Card Body: two-column grid rows -->
+            <div class="card-body px-4 py-2">
+
+                <!-- Full Name -->
+                <div class="row py-3 border-bottom align-items-center">
+                    <div class="col-md-4 fw-semibold text-muted small">Full Name</div>
+                    <div class="col-md-8 fw-medium">{{ current_user.name }}</div>
+                </div>
+
+                <!-- Username -->
+                <div class="row py-3 border-bottom align-items-center">
+                    <div class="col-md-4 fw-semibold text-muted small">Username</div>
+                    <div class="col-md-8 fw-medium">{{ current_user.username }}</div>
+                </div>
+
+                <!-- Phone -->
+                <div class="row py-3 border-bottom align-items-center">
+                    <div class="col-md-4 fw-semibold text-muted small">Phone</div>
+                    <div class="col-md-8 fw-medium">
+                        {{ current_user.contact if current_user.contact else '—' }}
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="row py-3 border-bottom align-items-center">
+                    <div class="col-md-4 fw-semibold text-muted small">Email</div>
+                    <div class="col-md-8 fw-medium">
+                        {{ current_user.email if current_user.email else '—' }}
+                    </div>
+                </div>
+
+                <!-- Role -->
+                <div class="row py-3 border-bottom align-items-center">
+                    <div class="col-md-4 fw-semibold text-muted small">Role</div>
+                    <div class="col-md-8 fw-medium">{{ current_user.role | capitalize }}</div>
+                </div>
+
+                <!-- Account Status — last row, no border-bottom -->
+                <div class="row py-3 align-items-center">
+                    <div class="col-md-4 fw-semibold text-muted small">Account Status</div>
+                    <div class="col-md-8 fw-medium">{{ current_user.status | capitalize }}</div>
+                </div>
+
+            </div>
+            <!-- END Card Body -->
+        </div>
+    </div>
+</div>
+<!-- ===== END PERSONAL INFORMATION ===== -->
+
+
+<!-- ===== 3. BOOKING HISTORY (permanent, never disappears) ===== -->
+<div class="mt-2">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="section-title mb-0">
+            <i class="bi bi-clock-history me-2 text-primary"></i>Booking History
+        </h5>
+        <span class="text-muted small">
+            {{ current_user.bookings | length }} total booking(s)
+        </span>
+    </div>
+
+    <div class="table-wrapper">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Trek</th>
+                    <th>Booking Date</th>
+                    <th>Assigned Staff</th>
+                    <th>Trek Status</th>
+                    <th>Booking Status</th>
+                    <th>Attendance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in current_user.bookings | sort(attribute='id', reverse=True) %}
+                <tr>
+                    <td class="fw-medium text-muted">{{ "BK-%04d" | format(booking.id) }}</td>
+                    <td class="fw-medium">{{ booking.trek.name }}</td>
+                    <td>{{ booking.booking_date.strftime('%d %b %Y') }}</td>
+                    <td>
+                        {% if booking.trek.assigned_staff_id %}
+                            {{ booking.trek.staff.name }}
+                        {% else %}
+                            <span class="text-muted small">TBD</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if booking.trek.status == 'Open' %}
+                            <span class="badge bg-success">Open</span>
+                        {% elif booking.trek.status == 'Started' %}
+                            <span class="badge bg-primary">Started</span>
+                        {% elif booking.trek.status == 'Completed' %}
+                            <span class="badge" style="background-color:#8B5CF6;">Completed</span>
+                        {% elif booking.trek.status == 'Cancelled' %}
+                            <span class="badge bg-danger">Cancelled</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ booking.trek.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if booking.status == 'Cancelled' %}
+                            <span class="badge bg-danger">Cancelled</span>
+                        {% else %}
+                            <span class="badge bg-success">Active</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if booking.attendance == 'Present' %}
+                            <span class="badge bg-success">Present</span>
+                        {% elif booking.attendance == 'Absent' %}
+                            <span class="badge bg-danger">Absent</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Not Marked</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">
+                        No booking history yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- ===== END BOOKING HISTORY ===== -->
+
+
+<!-- =====================================================
+     4. EDIT PROFILE MODAL
+     Hidden by default. Opens when "Edit Profile" button
+     is clicked. POSTs to the existing /profile route.
+     ===================================================== -->
+<div class="modal fade" id="editProfileModal" tabindex="-1"
+     aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:12px;border:1px solid #E5E7EB;">
+
+            <!-- Modal Header -->
+            <div class="modal-header" style="border-bottom:1px solid #E5E7EB;">
+                <h5 class="modal-title fw-bold" id="editProfileModalLabel">
+                    <i class="bi bi-pencil-square me-2 text-primary"></i>Edit Profile
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body: Edit Form -->
+            <div class="modal-body p-4">
+                <form method="POST" action="{{ url_for('profile') }}" id="editProfileForm">
+
+                    <!-- Full Name -->
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" name="name"
+                               value="{{ current_user.name }}"
+                               placeholder="Your full name">
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="mb-3">
+                        <label class="form-label">Phone / Contact</label>
+                        <input type="text" class="form-control" name="contact"
+                               value="{{ current_user.contact or '' }}"
+                               placeholder="Your phone number">
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" name="email"
+                               value="{{ current_user.email or '' }}"
+                               placeholder="your@email.com">
+                    </div>
+
+                    <!-- Divider with note -->
+                    <hr class="my-3">
+                    <p class="small text-muted mb-3">
+                        <i class="bi bi-shield-lock me-1"></i>
+                        Leave password fields empty to keep your current password.
+                    </p>
+
+                    <!-- New Password -->
+                    <div class="mb-3">
+                        <label class="form-label">New Password</label>
+                        <input type="password" class="form-control" name="password"
+                               placeholder="Enter new password">
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="mb-3">
+                        <label class="form-label">Confirm New Password</label>
+                        <input type="password" class="form-control" name="confirm_password"
+                               placeholder="Confirm new password">
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- Modal Footer: Save + Cancel -->
+            <div class="modal-footer" style="border-top:1px solid #E5E7EB;">
+                <!-- Cancel closes the modal without saving -->
+                <button type="button" class="btn btn-outline-secondary"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+                <!-- Save submits the form inside the modal body -->
+                <button type="submit" form="editProfileForm" class="btn btn-primary">
+                    <i class="bi bi-check-lg me-1"></i> Save Changes
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- ===== END EDIT PROFILE MODAL ===== -->
+
+{% endblock %}

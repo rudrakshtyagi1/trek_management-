@@ -1,16 +1,56 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="p-5 mb-4 bg-white rounded-3 shadow-sm text-center">
-    <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold">Welcome to TrekManager</h1>
-        <p class="col-md-8 mx-auto fs-4">Your ultimate system for organizing, managing, and booking breathtaking trekking adventures.</p>
-        {% if not current_user.is_authenticated %}
-            <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg mt-3">Join as Trekker or Staff</a>
-            <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg mt-3">Login</a>
-        {% else %}
-            <a href="{{ url_for('index') }}" class="btn btn-success btn-lg mt-3">Go to Dashboard</a>
-        {% endif %}
+
+<!-- ===== HERO SECTION ===== -->
+<div class="hero-section">
+    <h1>Plan Your Next Trek</h1>
+    <p>Book, manage and explore trekking adventures in one place.</p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-4">
+            Browse Treks
+        </a>
+        <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg px-4">
+            Login
+        </a>
     </div>
 </div>
+<!-- ===== END HERO ===== -->
+
+<!-- ===== FEATURE CARDS ===== -->
+<div class="row g-4">
+
+    <div class="col-md-4">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="bi bi-geo-alt-fill"></i>
+            </div>
+            <h5>Discover Treks</h5>
+            <p>Browse available trekking routes across various locations and difficulty levels.</p>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="bi bi-people-fill"></i>
+            </div>
+            <h5>Expert Management</h5>
+            <p>Admins manage staff and trekkers efficiently from a central dashboard.</p>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="bi bi-ticket-perforated-fill"></i>
+            </div>
+            <h5>Easy Booking</h5>
+            <p>Book your trek in a few clicks and track all your bookings from your dashboard.</p>
+        </div>
+    </div>
+
+</div>
+<!-- ===== END FEATURE CARDS ===== -->
+
 {% endblock %}

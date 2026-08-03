@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- ===== EDIT TREK FORM ===== -->
+<div class="row justify-content-center">
+    <div class="col-md-8">
+
+        <!-- Back link -->
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-sm btn-outline-secondary mb-3">
+            <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+        </a>
+
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-pencil-square me-2 text-primary"></i>
+                Edit Trek — {{ trek.name }}
+            </div>
+
+            <div class="card-body p-4">
+                <form method="POST" action="{{ url_for('edit_trek', trek_id=trek.id) }}">
+
+                    <!-- Trek Name & Location -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Trek Name</label>
+                            <input type="text" class="form-control" name="name"
+                                   value="{{ trek.name }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Location</label>
+                            <input type="text" class="form-control" name="location"
+                                   value="{{ trek.location }}" required>
+                        </div>
+                    </div>
+
+                    <!-- Difficulty, Duration, Slots -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Difficulty</label>
+                            <select class="form-select" name="difficulty" required>
+                                <option value="Easy"     {% if trek.difficulty == 'Easy'     %}selected{% endif %}>Easy</option>
+                                <option value="Moderate" {% if trek.difficulty == 'Moderate' %}selected{% endif %}>Moderate</option>
+                                <option value="Hard"     {% if trek.difficulty == 'Hard'     %}selected{% endif %}>Hard</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Duration (Days)</label>
+                            <input type="number" class="form-control" name="duration"
+                                   value="{{ trek.duration }}" required min="1">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Available Slots</label>
+                            <input type="number" class="form-control" name="available_slots"
+                                   value="{{ trek.available_slots }}" required min="0">
+                        </div>
+                    </div>
+
+                    <!-- Dates -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Start Date</label>
+                            <input type="date" class="form-control" name="start_date"
+                                   value="{{ trek.start_date.strftime('%Y-%m-%d') }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">End Date</label>
+                            <input type="date" class="form-control" name="end_date"
+                                   value="{{ trek.end_date.strftime('%Y-%m-%d') }}" required>
+                        </div>
+                    </div>
+
+                    <!-- Status & Assign Staff -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label">Trek Status</label>
+                            <select class="form-select" name="status" required>
+                                <option value="Open"      {% if trek.status == 'Open'      %}selected{% endif %}>Open</option>
+                                <option value="Closed"    {% if trek.status == 'Closed'    %}selected{% endif %}>Closed</option>
+                                <option value="Completed" {% if trek.status == 'Completed' %}selected{% endif %}>Completed</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Assign Staff</label>
+                            <select class="form-select" name="staff_id">
+                                <option value="">-- No Staff Assigned --</option>
+                                {% for staff in available_staff %}
+                                    <option value="{{ staff.id }}"
+                                        {% if trek.assigned_staff_id == staff.id %}selected{% endif %}>
+                                        {{ staff.name }} ({{ staff.contact }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg me-1"></i> Save Changes
+                        </button>
+                        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- ===== END EDIT TREK ===== -->
+
+{% endblock %}

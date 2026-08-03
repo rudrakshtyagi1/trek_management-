@@ -1,41 +1,359 @@
+/* ================================================
+   style.css — Trekkers App
+   Color Palette:
+     Primary  : #38BDF8 (Sky Blue)
+     Secondary: #22C55E (Green)
+     Background: #FFFFFF / #F8FAFC
+     Text     : #1F2937
+     Border   : #E5E7EB
+   ================================================ */
+
+
+/* ---- Base ---- */
 body {
-    padding-top: 70px;
-    background-color: #f0f8ff; 
+    background-color: #F8FAFC;
+    color: #1F2937;
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    padding-top: 68px; /* offset for fixed navbar */
 }
 
-/
-.bg-dark {
-    background: linear-gradient(135deg, #005b96, #00a86b) !important; /* Blue to Green gradient */
+/* ---- Navbar ---- */
+.navbar {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #E5E7EB;
+    padding: 12px 0;
 }
-
-.card {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    border: none;
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #1F2937 !important;
+    letter-spacing: 0.3px;
+}
+.navbar .nav-link {
+    color: #374151 !important;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+    color: #38BDF8 !important;
+    background-color: #F0F9FF;
+}
+.navbar .dropdown-toggle::after {
+    vertical-align: middle;
+}
+.dropdown-menu {
+    border: 1px solid #E5E7EB;
     border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    padding: 6px;
+    min-width: 190px;
+}
+.dropdown-item {
+    border-radius: 6px;
+    font-size: 0.875rem;
+    padding: 8px 12px;
+    color: #374151;
+}
+.dropdown-item:hover {
+    background-color: #F0F9FF;
+    color: #38BDF8;
 }
 
-.card-header {
-    border-radius: 10px 10px 0 0 !important;
+/* ---- Buttons ---- */
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    padding: 8px 16px;
 }
-
-
 .btn-primary {
-    background-color: #005b96;
-    border-color: #005b96;
+    background-color: #38BDF8;
+    border-color: #38BDF8;
+    color: #fff;
 }
-
-.btn-primary:hover {
-    background-color: #004575;
-    border-color: #004575;
+.btn-primary:hover, .btn-primary:focus {
+    background-color: #0EA5E9;
+    border-color: #0EA5E9;
+    color: #fff;
 }
-
-
 .btn-success {
-    background-color: #00a86b;
-    border-color: #00a86b;
+    background-color: #22C55E;
+    border-color: #22C55E;
+}
+.btn-success:hover, .btn-success:focus {
+    background-color: #16A34A;
+    border-color: #16A34A;
+}
+.btn-outline-primary {
+    border-color: #38BDF8;
+    color: #38BDF8;
+}
+.btn-outline-primary:hover {
+    background-color: #38BDF8;
+    color: #fff;
+}
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 0.8rem;
 }
 
-.btn-success:hover {
-    background-color: #008a58;
-    border-color: #008a58;
+/* ---- Cards ---- */
+.card {
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    background-color: #ffffff;
+}
+.card-header {
+    background-color: #F8FAFC !important;
+    border-bottom: 1px solid #E5E7EB;
+    border-radius: 12px 12px 0 0 !important;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #1F2937;
+    padding: 14px 20px;
+}
+.card-body {
+    padding: 20px;
+}
+
+/* ---- Stat Cards (Admin) ---- */
+.stat-card {
+    background: #ffffff;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.stat-card .stat-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+.stat-card .stat-number {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #1F2937;
+}
+.stat-card .stat-label {
+    font-size: 0.8rem;
+    color: #6B7280;
+    margin-top: 2px;
+}
+
+/* ---- Tables ---- */
+.table-wrapper {
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #ffffff;
+}
+.table {
+    margin-bottom: 0;
+    font-size: 0.875rem;
+}
+.table thead th {
+    background-color: #F8FAFC;
+    color: #6B7280;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #E5E7EB;
+    padding: 12px 16px;
+    white-space: nowrap;
+}
+.table td {
+    vertical-align: middle;
+    padding: 12px 16px;
+    border-bottom: 1px solid #F3F4F6;
+    color: #1F2937;
+}
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+.table-hover tbody tr:hover {
+    background-color: #F8FAFC;
+}
+
+/* ---- Forms ---- */
+.form-control,
+.form-select {
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    color: #1F2937;
+    font-size: 0.9rem;
+    padding: 9px 13px;
+}
+.form-control:focus,
+.form-select:focus {
+    border-color: #38BDF8;
+    box-shadow: 0 0 0 3px rgba(56,189,248,0.15);
+}
+.form-label {
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: #374151;
+    margin-bottom: 5px;
+}
+.input-group .form-control {
+    border-right: none;
+    border-radius: 8px 0 0 8px;
+}
+.input-group .btn {
+    border-radius: 0 8px 8px 0;
+}
+
+/* ---- Badges ---- */
+.badge {
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.75rem;
+    padding: 4px 9px;
+}
+
+/* ---- Alerts ---- */
+.alert {
+    border-radius: 10px;
+    border: none;
+    font-size: 0.875rem;
+}
+
+/* ---- Hero Section (Landing Page) ---- */
+.hero-section {
+    background-color: #F0F9FF;
+    border: 1px solid #BAE6FD;
+    border-radius: 16px;
+    padding: 64px 32px;
+    text-align: center;
+    margin-bottom: 32px;
+}
+.hero-section h1 {
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: #1F2937;
+    margin-bottom: 14px;
+}
+.hero-section p {
+    font-size: 1.05rem;
+    color: #6B7280;
+    max-width: 500px;
+    margin: 0 auto 28px;
+}
+
+/* ---- Feature Cards (Landing Page) ---- */
+.feature-card {
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 28px 20px;
+    text-align: center;
+    background: #ffffff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    height: 100%;
+}
+.feature-card .feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    margin: 0 auto 14px;
+    background-color: #F0F9FF;
+    color: #38BDF8;
+}
+.feature-card h5 {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #1F2937;
+    margin-bottom: 8px;
+}
+.feature-card p {
+    font-size: 0.875rem;
+    color: #6B7280;
+    margin: 0;
+}
+
+/* ---- Trek Cards (User Dashboard) ---- */
+.trek-card {
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    background: #ffffff;
+    transition: box-shadow 0.18s, transform 0.18s;
+    height: 100%;
+}
+.trek-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    transform: translateY(-2px);
+}
+.trek-card .card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ---- Profile Avatar ---- */
+.avatar-circle {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background-color: #38BDF8;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.7rem;
+    font-weight: 700;
+    margin: 0 auto 12px;
+}
+
+/* ---- Nav Tabs ---- */
+.nav-tabs {
+    border-bottom: 1px solid #E5E7EB;
+    margin-bottom: 24px;
+}
+.nav-tabs .nav-link {
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    color: #6B7280 !important;
+    font-weight: 500;
+    font-size: 0.875rem;
+    padding: 10px 16px;
+    background: none !important;
+}
+.nav-tabs .nav-link:hover {
+    color: #38BDF8 !important;
+    background: none !important;
+}
+.nav-tabs .nav-link.active {
+    color: #38BDF8 !important;
+    border-bottom: 2px solid #38BDF8;
+    background: none !important;
+}
+
+/* ---- Section Headings ---- */
+.section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1F2937;
+    margin-bottom: 12px;
+}
+
+/* ---- Page Title ---- */
+.page-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1F2937;
 }
