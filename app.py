@@ -1,27 +1,41 @@
 from flask import Flask
-from models import db
-from routes import init_routes
-import os
+from models import db, User
+from routes import configure_routes
+from flask_login import LoginManager
+from werkzeug.security import generate_password_hash
 
-def create_app():
-    app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'super-secret-development-key'
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'trekking_secret_key_123'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///trekking.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)
+
+login_manager = LoginManager()
+login_manager.login_view = 'login'
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+configure_routes(app, db)
+
+with app.app_context():
+    db.create_all()
     
-    basedir = os.path.abspath(os.path.dirname(__file__))
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'trekking.db')
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-    db.init_app(app)
-
-    with app.app_context():
-        # Create all tables in the database if they don't exist
-        db.create_all()
-
-    # Initialize all application routes
-    init_routes(app)
-
-    return app
+    admin = User.query.filter_by(role='admin').first()
+    if not admin:
+        hashed_password = generate_password_hash('admin123')
+        new_admin = User(
+            username='admin',
+            password_hash=hashed_password,
+            role='admin',
+            name='System Admin',
+            status='approved'
+        )
+        db.session.add(new_admin)
+        db.session.commit()
 
 if __name__ == '__main__':
-    app = create_app()
     app.run(debug=True)
