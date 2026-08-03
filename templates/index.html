@@ -1,37 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="p-5 mb-4 bg-light rounded-3 text-center hero-section">
+<div class="p-5 mb-4 bg-white rounded-3 shadow-sm text-center">
     <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold">Explore the World with TrekApp</h1>
-        <p class="col-md-8 mx-auto fs-4">Join us on amazing trekking adventures. Manage your bookings, explore new routes, and conquer the peaks.</p>
+        <h1 class="display-5 fw-bold">Welcome to TrekManager</h1>
+        <p class="col-md-8 mx-auto fs-4">Your ultimate system for organizing, managing, and booking breathtaking trekking adventures.</p>
         {% if not current_user.is_authenticated %}
-            <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Join Now</a>
-            <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg">Login</a>
+            <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg mt-3">Join as Trekker or Staff</a>
+            <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg mt-3">Login</a>
         {% else %}
-            {% if current_user.role == 'admin' %}
-                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-primary btn-lg">Go to Dashboard</a>
-            {% elif current_user.role == 'staff' %}
-                <a href="{{ url_for('staff_dashboard') }}" class="btn btn-primary btn-lg">Go to Dashboard</a>
-            {% else %}
-                <a href="{{ url_for('user_dashboard') }}" class="btn btn-primary btn-lg">Go to Dashboard</a>
-            {% endif %}
+            <a href="{{ url_for('index') }}" class="btn btn-success btn-lg mt-3">Go to Dashboard</a>
         {% endif %}
-    </div>
-</div>
-
-<div class="row align-items-md-stretch text-center">
-    <div class="col-md-6">
-        <div class="h-100 p-5 text-white bg-dark rounded-3">
-            <h2>For Adventure Seekers</h2>
-            <p>Browse our extensive catalog of treks ranging from beginner to expert difficulty. Book your next adventure in a few clicks.</p>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="h-100 p-5 bg-light border rounded-3">
-            <h2>Expert Staff & Guides</h2>
-            <p>Our experienced staff manages every detail to ensure you have a safe and memorable journey.</p>
-        </div>
     </div>
 </div>
 {% endblock %}
