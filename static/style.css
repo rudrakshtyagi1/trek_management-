@@ -1,8 +1,41 @@
 body {
     padding-top: 70px;
-    background-color: #f8f9fa;
+    background-color: #f0f8ff; 
+}
+
+/
+.bg-dark {
+    background: linear-gradient(135deg, #005b96, #00a86b) !important; /* Blue to Green gradient */
 }
 
 .card {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border: none;
+    border-radius: 10px;
+}
+
+.card-header {
+    border-radius: 10px 10px 0 0 !important;
+}
+
+
+.btn-primary {
+    background-color: #005b96;
+    border-color: #005b96;
+}
+
+.btn-primary:hover {
+    background-color: #004575;
+    border-color: #004575;
+}
+
+
+.btn-success {
+    background-color: #00a86b;
+    border-color: #00a86b;
+}
+
+.btn-success:hover {
+    background-color: #008a58;
+    border-color: #008a58;
 }
