@@ -64,6 +64,10 @@
                             <span class="text-muted">Dates</span>
                             <span>{{ trek.start_date.strftime('%d %b') }} - {{ trek.end_date.strftime('%d %b %Y') }}</span>
                         </div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="text-muted">Cost</span>
+                            <span class="fw-bold text-success">₹{{ trek.cost }}</span>
+                        </div>
                         <div class="d-flex justify-content-between">
                             <span class="text-muted">Slots Left</span>
                             {% if trek.available_slots > 0 %}

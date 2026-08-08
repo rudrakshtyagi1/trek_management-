@@ -225,11 +225,12 @@ def configure_routes(app, db):
             location = request.form.get('location')
             diff     = request.form.get('difficulty')
             duration = int(request.form.get('duration'))
+            cost     = float(request.form.get('cost', 0.0))
             slots    = int(request.form.get('available_slots'))
             start    = datetime.strptime(request.form.get('start_date'), '%Y-%m-%d')
             end      = datetime.strptime(request.form.get('end_date'), '%Y-%m-%d')
             new_trek = Trek(name=name, location=location, difficulty=diff,
-                            duration=duration, available_slots=slots,
+                            duration=duration, cost=cost, available_slots=slots,
                             start_date=start, end_date=end, status='Open')
             db.session.add(new_trek)
             db.session.commit()
@@ -253,6 +254,7 @@ def configure_routes(app, db):
             trek.location        = request.form.get('location')
             trek.difficulty      = request.form.get('difficulty')
             trek.duration        = int(request.form.get('duration'))
+            trek.cost            = float(request.form.get('cost', 0.0))
             trek.available_slots = int(request.form.get('available_slots'))
             trek.start_date      = datetime.strptime(request.form.get('start_date'), '%Y-%m-%d')
             trek.end_date        = datetime.strptime(request.form.get('end_date'), '%Y-%m-%d')

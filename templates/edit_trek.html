@@ -34,9 +34,9 @@
                         </div>
                     </div>
 
-                    <!-- Difficulty, Duration, Slots -->
+                    <!-- Difficulty, Duration, Cost, Slots -->
                     <div class="row mb-3">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label class="form-label">Difficulty</label>
                             <select class="form-select" name="difficulty" required>
                                 <option value="Easy"     {% if trek.difficulty == 'Easy'     %}selected{% endif %}>Easy</option>
@@ -44,12 +44,17 @@
                                 <option value="Hard"     {% if trek.difficulty == 'Hard'     %}selected{% endif %}>Hard</option>
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label class="form-label">Duration (Days)</label>
                             <input type="number" class="form-control" name="duration"
                                    value="{{ trek.duration }}" required min="1">
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <label class="form-label">Cost (₹)</label>
+                            <input type="number" step="0.01" class="form-control" name="cost"
+                                   value="{{ trek.cost }}" required min="0">
+                        </div>
+                        <div class="col-md-3">
                             <label class="form-label">Available Slots</label>
                             <input type="number" class="form-control" name="available_slots"
                                    value="{{ trek.available_slots }}" required min="0">

@@ -32,6 +32,7 @@ with app.app_context():
         for stmt in [
             "ALTER TABLE user    ADD COLUMN email      VARCHAR(100)",
             "ALTER TABLE booking ADD COLUMN attendance  VARCHAR(20) DEFAULT 'Not Marked'",
+            "ALTER TABLE trek    ADD COLUMN cost        FLOAT DEFAULT 0.0",
         ]:
             try:
                 conn.execute(text(stmt))
